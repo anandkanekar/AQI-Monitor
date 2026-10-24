@@ -110,7 +110,7 @@ def build() -> str:
     for (y, h), (t, s) in zip(three, [
         ("Sensor fleet", ["8 cities · diurnal traffic pattern"]),
         ("JSON reading", ["PM2.5 · PM10 · NO2 · O3 · CO2"]),
-        ("Kafka producer", ["generator/sensor_simulator.py"]),
+        ("Kafka producer", ["sensor simulator · JSON over Kafka"]),
     ]):
         box(c[0] + PAD, y, bw, h, t, s, "source")
 
