@@ -17,7 +17,7 @@ A streaming + batch lakehouse for Air Quality Index (AQI) data, built entirely o
 
 ## Architecture
 
-![AQI Tracking System architecture](docs/architecture.svg)
+![AQI Tracking System architecture](docs/screenshots/architecture.svg)
 
 *Editable source: `docs/architecture.py` — regenerate with `python docs/architecture.py`.*
 
@@ -57,7 +57,7 @@ A streaming + batch lakehouse for Air Quality Index (AQI) data, built entirely o
 | `docs/AQI_System_Design_Document.docx` | Word version of the design doc — regenerate with `python docs/generate_system_design_docx.py` |
 | [`docs/PROJECT_OVERVIEW.md`](docs/PROJECT_OVERVIEW.md) | Onboarding/stakeholder overview: purpose, tech stack, core functionality, outcomes |
 | `docs/AQI_Project_Walkthrough.docx` | Word walkthrough — regenerate with `python docs/generate_walkthrough_docx.py` |
-| [`docs/architecture.svg`](docs/architecture.svg) | Rendered architecture diagram — regenerate with `python docs/architecture.py` |
+| [`docs/screenshots/architecture.svg`](docs/screenshots/architecture.svg) | Rendered architecture diagram — regenerate with `python docs/architecture.py` |
 
 ---
 
