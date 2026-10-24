@@ -46,22 +46,6 @@ A streaming + batch lakehouse for Air Quality Index (AQI) data, built entirely o
 
 `aqi_common/aqi.py` is the single source of the EPA breakpoints. The Flink job imports it directly. The Airflow DAG uses it to generate the Trino `CASE` expressions, via Jinja macros in `airflow/dags/sql/*.sql`. A unit test runs the generated SQL in DuckDB and checks that it gives the same result as the Python code, so the real-time AQI and the historical AQI cannot drift apart.
 
----
-
-=======
-## Documentation
-
-| Document | What it covers |
-|---|---|
-| [`docs/SYSTEM_DESIGN.md`](docs/SYSTEM_DESIGN.md) | Interview-style system design: requirements, capacity estimation, deep dives, trade-offs, failure analysis, and a Q&A bank |
-| `docs/AQI_System_Design_Document.docx` | Word version of the design doc — regenerate with `python docs/generate_system_design_docx.py` |
-| [`docs/PROJECT_OVERVIEW.md`](docs/PROJECT_OVERVIEW.md) | Onboarding/stakeholder overview: purpose, tech stack, core functionality, outcomes |
-| `docs/AQI_Project_Walkthrough.docx` | Word walkthrough — regenerate with `python docs/generate_walkthrough_docx.py` |
-| [`docs/screenshots/architecture.svg`](docs/screenshots/architecture.svg) | Rendered architecture diagram — regenerate with `python docs/architecture.py` |
-
----
-
->>>>>>> 6be6d47f71fdbcf606b11d3e2e97eaaed3faf195
 ## Repository layout
 
 ```
