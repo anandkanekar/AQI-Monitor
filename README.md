@@ -160,8 +160,6 @@ Grafana provisions two dashboards, in the **AQI** folder:
 
 ![Grafana: AQI Pipeline Health dashboard](docs/screenshots/grafana-aqi-pipeline.png)
 
-*Screenshots captured from a live local stack — regenerate with `python docs/take_screenshots.py` (needs `pip install playwright` and a local Chrome).*
-
 ### Development and tests
 
 ```bash
