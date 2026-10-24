@@ -1,0 +1,88 @@
+groups:
+  - name: pipeline-health
+    rules:
+      - record: aqi:kafka_consumergroup_lag:sum
+        expr: sum by (consumergroup, topic) (kafka_consumergroup_lag)
+
+      - record: aqi:kafka_topic_ingest_rate:1m
+        expr: sum by (topic) (rate(kafka_topic_partition_current_offset[1m]))
+
+      - alert: ScrapeTargetDown
+        expr: up == 0
+        for: 2m
+        labels: { severity: critical, team: data-platform }
+        annotations:
+          summary: "{{ $labels.job }} target {{ $labels.instance }} is down"
+          description: "Prometheus has failed to scrape {{ $labels.instance }} for 2 minutes."
+
+      - alert: KafkaBrokerUnreachable
+        expr: kafka_brokers < 1 or absent(kafka_brokers)
+        for: 2m
+        labels: { severity: critical, team: data-platform }
+        annotations:
+          summary: "Kafka cluster has no reachable brokers"
+
+      - alert: KafkaConsumerLagHigh
+        expr: aqi:kafka_consumergroup_lag:sum{consumergroup=~"aqi-.*"} > 10000
+        for: 5m
+        labels: { severity: warning, team: data-platform }
+        annotations:
+          summary: "Consumer group {{ $labels.consumergroup }} lagging on {{ $labels.topic }}"
+          description: "Lag is {{ $value | humanize }} messages for 5m. Scale out Flink parallelism or investigate backpressure."
+
+      - alert: KafkaConsumerLagGrowing
+        expr: deriv(aqi:kafka_consumergroup_lag:sum{consumergroup=~"aqi-.*"}[10m]) > 50
+        for: 15m
+        labels: { severity: warning, team: data-platform }
+        annotations:
+          summary: "Lag of {{ $labels.consumergroup }} keeps growing"
+
+      - alert: NoSensorDataIngested
+        expr: sum(aqi:kafka_topic_ingest_rate:1m{topic="aqi.raw"}) == 0
+        for: 5m
+        labels: { severity: critical, team: data-platform }
+        annotations:
+          summary: "No sensor readings ingested into aqi.raw for 5 minutes"
+
+      - alert: FlinkJobsNotRunning
+        expr: flink_jobmanager_numRunningJobs < 2
+        for: 2m
+        labels: { severity: critical, team: data-platform }
+        annotations:
+          summary: "Only {{ $value }} Flink jobs running (expected 2: aqi-detection, aqi-landing-zone)"
+          description: "Resubmit with `docker compose run --rm flink-job-submitter` after checking the JobManager logs."
+
+      - alert: FlinkJobRestarting
+        expr: increase(flink_jobmanager_job_numRestarts[10m]) > 2
+        labels: { severity: warning, team: data-platform }
+        annotations:
+          summary: "Flink job {{ $labels.job_name }} restarted {{ $value | humanize }} times in 10m"
+
+      - alert: FlinkCheckpointsFailing
+        expr: increase(flink_jobmanager_job_numberOfFailedCheckpoints[10m]) > 0
+        for: 5m
+        labels: { severity: warning, team: data-platform }
+        annotations:
+          summary: "Checkpoints failing for Flink job {{ $labels.job_name }}"
+          description: "Landing-zone files are only committed on successful checkpoints; data will not reach MinIO."
+
+      - alert: FlinkNoTaskManagers
+        expr: flink_jobmanager_numRegisteredTaskManagers < 1
+        for: 1m
+        labels: { severity: critical, team: data-platform }
+        annotations:
+          summary: "No Flink TaskManagers registered"
+
+      - alert: DeadLetterQueueGrowing
+        expr: sum(rate(kafka_topic_partition_current_offset{topic="aqi.dlq"}[5m])) > 1
+        for: 10m
+        labels: { severity: warning, team: data-platform }
+        annotations:
+          summary: "Malformed sensor messages arriving at {{ $value | humanize }}/s (aqi.dlq)"
+
+      - alert: MinioStorageNearlyFull
+        expr: minio_cluster_capacity_usable_free_bytes / minio_cluster_capacity_usable_total_bytes < 0.1
+        for: 10m
+        labels: { severity: warning, team: data-platform }
+        annotations:
+          summary: "MinIO has less than 10% usable capacity left"

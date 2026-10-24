@@ -1,0 +1,64 @@
+groups:
+  - name: aqi-recording
+    rules:
+      - record: aqi:city:max
+        expr: max by (city) (aqi_index)
+      - record: aqi:city:avg
+        expr: avg by (city) (aqi_index)
+
+  - name: aqi-thresholds
+    rules:
+      # City-level alerts use the median sensor so one faulty device can't page anyone.
+      - alert: AQIUnhealthy
+        expr: quantile by (city) (0.5, aqi_index) > 150
+        for: 10m
+        labels: { severity: warning, team: public-health, category: aqi }
+        annotations:
+          summary: "AQI Unhealthy in {{ $labels.city }} (median {{ $value | printf \"%.0f\" }})"
+          description: "Median sensor AQI in {{ $labels.city }} has been above 150 for 10 minutes. Everyone may begin to experience health effects."
+
+      - alert: AQIVeryUnhealthy
+        expr: quantile by (city) (0.5, aqi_index) > 200
+        for: 5m
+        labels: { severity: critical, team: public-health, category: aqi }
+        annotations:
+          summary: "AQI Very Unhealthy in {{ $labels.city }} (median {{ $value | printf \"%.0f\" }})"
+          description: "Health alert: the risk of health effects is increased for everyone."
+
+      - alert: AQIHazardous
+        expr: quantile by (city) (0.5, aqi_index) > 300
+        for: 2m
+        labels: { severity: emergency, team: public-health, category: aqi }
+        annotations:
+          summary: "HAZARDOUS AQI in {{ $labels.city }} (median {{ $value | printf \"%.0f\" }})"
+          description: "Emergency conditions: everyone is more likely to be affected. Trigger the public notification runbook."
+
+      - alert: SensorAQIVeryUnhealthy
+        expr: aqi_index > 200
+        for: 15m
+        labels: { severity: warning, team: public-health, category: aqi }
+        annotations:
+          summary: "Sensor {{ $labels.sensor_id }} ({{ $labels.city }}) AQI {{ $value }} for 15m"
+
+      - alert: CO2LevelHigh
+        expr: max by (city, sensor_id) (aqi_pollutant_concentration{pollutant="co2"}) > 2000
+        for: 10m
+        labels: { severity: warning, team: public-health, category: aqi }
+        annotations:
+          summary: "CO2 {{ $value | printf \"%.0f\" }} ppm at {{ $labels.sensor_id }} ({{ $labels.city }})"
+
+  - name: aqi-data-quality
+    rules:
+      - alert: SensorSilent
+        expr: time() - aqi_sensor_last_seen_timestamp_seconds > 300
+        for: 5m
+        labels: { severity: warning, team: field-ops, category: sensor }
+        annotations:
+          summary: "Sensor {{ $labels.sensor_id }} ({{ $labels.city }}) silent for {{ $value | humanizeDuration }}"
+
+      - alert: SensorAnomalyBurst
+        expr: sum by (city) (increase(aqi_anomalies_total[15m])) > 20
+        labels: { severity: warning, team: field-ops, category: sensor }
+        annotations:
+          summary: "{{ $value | printf \"%.0f\" }} sensor anomalies in {{ $labels.city }} over 15m"
+          description: "Possible sensor malfunction or a real, sudden pollution event. Check the AQI Overview dashboard."

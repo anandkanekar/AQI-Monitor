@@ -1,0 +1,108 @@
+# Rendered at container start by entrypoint.sh: every ${VAR} is substituted from the environment.
+global:
+  resolve_timeout: 5m
+  smtp_smarthost: "${SMTP_SMARTHOST}"
+  smtp_from: "${SMTP_FROM}"
+  smtp_auth_username: "${SMTP_USERNAME}"
+  smtp_auth_password: "${SMTP_PASSWORD}"
+  smtp_require_tls: ${SMTP_REQUIRE_TLS}
+  slack_api_url: "${SLACK_WEBHOOK_URL}"
+
+templates:
+  - /etc/alertmanager/templates/*.tmpl
+
+route:
+  receiver: platform-email
+  group_by: [alertname, city]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  routes:
+    # Public-health AQI alerts: Slack + email; SMS for critical/emergency.
+    - matchers: [category="aqi", severity=~"critical|emergency"]
+      receiver: aqi-critical
+      repeat_interval: 1h
+    - matchers: [category="aqi"]
+      receiver: aqi-warning
+    # Sensor fleet issues go to field operations.
+    - matchers: [category="sensor"]
+      receiver: field-ops
+      group_by: [alertname, city]
+      repeat_interval: 12h
+    # Pipeline health (Kafka lag, Flink status, ...) goes to the data platform on-call.
+    - matchers: [team="data-platform", severity="critical"]
+      receiver: platform-critical
+      repeat_interval: 30m
+    - matchers: [team="data-platform"]
+      receiver: platform-email
+
+inhibit_rules:
+  # Don't send "Unhealthy" when "Very Unhealthy"/"Hazardous" is already firing for the same city.
+  - source_matchers: [alertname="AQIHazardous"]
+    target_matchers: [alertname=~"AQIVeryUnhealthy|AQIUnhealthy"]
+    equal: [city]
+  - source_matchers: [alertname="AQIVeryUnhealthy"]
+    target_matchers: [alertname="AQIUnhealthy"]
+    equal: [city]
+  # If ingestion is down, per-sensor silence alerts are noise.
+  - source_matchers: [alertname="NoSensorDataIngested"]
+    target_matchers: [alertname="SensorSilent"]
+
+receivers:
+  - name: platform-email
+    email_configs:
+      - to: "${ALERT_EMAIL_TO}"
+        send_resolved: true
+        headers: { Subject: '{{ template "aqi.email.subject" . }}' }
+        html: '{{ template "aqi.email.html" . }}'
+
+  - name: platform-critical
+    email_configs:
+      - to: "${ALERT_EMAIL_TO}"
+        send_resolved: true
+        headers: { Subject: '{{ template "aqi.email.subject" . }}' }
+        html: '{{ template "aqi.email.html" . }}'
+    slack_configs:
+      - channel: "${SLACK_CHANNEL_PLATFORM}"
+        send_resolved: true
+        title: '{{ template "aqi.slack.title" . }}'
+        text: '{{ template "aqi.slack.text" . }}'
+
+  - name: aqi-warning
+    email_configs:
+      - to: "${ALERT_EMAIL_TO}"
+        send_resolved: true
+        headers: { Subject: '{{ template "aqi.email.subject" . }}' }
+        html: '{{ template "aqi.email.html" . }}'
+    slack_configs:
+      - channel: "${SLACK_CHANNEL_AQI}"
+        send_resolved: true
+        color: '{{ if eq .Status "firing" }}warning{{ else }}good{{ end }}'
+        title: '{{ template "aqi.slack.title" . }}'
+        text: '{{ template "aqi.slack.text" . }}'
+
+  - name: aqi-critical
+    email_configs:
+      - to: "${ALERT_EMAIL_TO}"
+        send_resolved: true
+        headers: { Subject: '{{ template "aqi.email.subject" . }}' }
+        html: '{{ template "aqi.email.html" . }}'
+    slack_configs:
+      - channel: "${SLACK_CHANNEL_AQI}"
+        send_resolved: true
+        color: '{{ if eq .Status "firing" }}danger{{ else }}good{{ end }}'
+        title: '{{ template "aqi.slack.title" . }}'
+        text: '{{ template "aqi.slack.text" . }}'
+    # SMS: Alertmanager posts its standard webhook JSON to an SMS gateway relay
+    # (e.g. Twilio / AWS SNS / MessageBird adapter). See README "SMS alerts".
+    webhook_configs:
+      - url: "${SMS_WEBHOOK_URL}"
+        send_resolved: false
+        max_alerts: 5
+
+  - name: field-ops
+    email_configs:
+      - to: "${ALERT_EMAIL_TO}"
+        send_resolved: true
+        headers: { Subject: '{{ template "aqi.email.subject" . }}' }
+        html: '{{ template "aqi.email.html" . }}'

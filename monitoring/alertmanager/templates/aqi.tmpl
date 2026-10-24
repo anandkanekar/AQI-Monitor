@@ -1,0 +1,36 @@
+{{ define "aqi.email.subject" -}}
+[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}{{ with .CommonLabels.city }} - {{ . }}{{ end }}
+{{- end }}
+
+{{ define "aqi.email.html" -}}
+<h2 style="color:{{ if eq .Status "firing" }}#c0392b{{ else }}#27ae60{{ end }}">
+  {{ .Status | toUpper }}: {{ .CommonLabels.alertname }}
+</h2>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;font-family:sans-serif">
+  <tr><th>Severity</th><th>Summary</th><th>Details</th><th>Started</th></tr>
+  {{ range .Alerts }}
+  <tr>
+    <td>{{ .Labels.severity }}</td>
+    <td>{{ .Annotations.summary }}</td>
+    <td>{{ .Annotations.description }}</td>
+    <td>{{ .StartsAt.Format "2006-01-02 15:04:05 MST" }}</td>
+  </tr>
+  {{ end }}
+</table>
+<p><a href="{{ .ExternalURL }}">Alertmanager</a> | <a href="http://localhost:3000/d/aqi-overview">AQI dashboard</a></p>
+{{- end }}
+
+{{ define "aqi.slack.title" -}}
+{{ if eq .Status "firing" }}:rotating_light:{{ else }}:white_check_mark:{{ end }} [{{ .Status | toUpper }}] {{ .CommonLabels.alertname }}{{ with .CommonLabels.city }} - {{ . }}{{ end }}
+{{- end }}
+
+{{ define "aqi.slack.text" -}}
+{{ range .Alerts -}}
+*{{ .Labels.severity | toUpper }}* {{ .Annotations.summary }}
+{{ with .Annotations.description }}> {{ . }}{{ end }}
+{{ end -}}
+{{- end }}
+
+{{ define "aqi.sms.text" -}}
+AQI {{ .Status | toUpper }}: {{ range .Alerts }}{{ .Annotations.summary }}; {{ end }}
+{{- end }}
