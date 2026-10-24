@@ -138,6 +138,10 @@ docker compose run --rm --entrypoint sh minio-init -c \
   'mc alias set l http://minio:9000 $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD >/dev/null; mc ls -r l/landing | tail'
 ```
 
+The Flink UI shows both streaming jobs running:
+
+![Flink UI: aqi-detection and aqi-landing-zone jobs RUNNING](docs/screenshots/flink-overview.png)
+
 ---
 
 ## Usage examples
@@ -178,6 +182,8 @@ docker compose exec airflow-scheduler airflow dags backfill aqi_daily_aggregatio
 
 You can also use the Airflow UI: **Trigger DAG w/ config** and set `target_date`.
 
+![Airflow: successful aqi_daily_aggregation runs](docs/screenshots/airflow-dag.png)
+
 ### Query with SQL (Trino)
 
 ```bash
@@ -214,12 +220,22 @@ FROM hive.analytics.weekly_city_aqi ORDER BY week_start DESC, avg_aqi DESC;
 
 **BI integration.** Any tool with a Trino/Presto driver can connect to `localhost:8080`, catalog `hive`. That includes Superset, Metabase, Tableau, Power BI (ODBC), DBeaver and JDBC (`jdbc:trino://localhost:8080/hive`). DuckDB can also read the curated Parquet files directly from MinIO through its `httpfs` extension.
 
+The Trino UI shows every query the cluster runs, including the ones issued by Grafana:
+
+![Trino cluster overview with query history](docs/screenshots/trino-ui.png)
+
 ### Dashboards
 
 Grafana provisions two dashboards, in the **AQI** folder:
 
 * **AQI Overview** (`/d/aqi-overview`): current worst and median AQI, AQI by city, a pollutant explorer, the top sensors, streaming alert and anomaly rates, firing Alertmanager alerts, and an AQI category timeline. Historical panels (daily average AQI, % unhealthy readings, weekly summary, worst sensors yesterday) come from Trino. Use a 30-day or longer time range for the historical panels.
 * **AQI Pipeline Health** (`/d/aqi-pipeline`): running Flink jobs and TaskManagers, Kafka consumer lag per group and partition, topic throughput, DLQ rate, Flink records/s, checkpoints, restarts and backpressure, the custom PyFlink counters, and MinIO capacity and requests.
+
+![Grafana: AQI Overview dashboard](docs/screenshots/grafana-aqi-overview.png)
+
+![Grafana: AQI Pipeline Health dashboard](docs/screenshots/grafana-aqi-pipeline.png)
+
+*Screenshots captured from a live local stack — regenerate with `python docs/take_screenshots.py` (needs `pip install playwright` and a local Chrome).*
 
 ### Alerting
 
