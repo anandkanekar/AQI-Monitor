@@ -1,4 +1,4 @@
-# AQI Tracking System
+# AQI-Monitor
 
 A streaming + batch lakehouse for Air Quality Index (AQI) data, built entirely on open-source components:
 
