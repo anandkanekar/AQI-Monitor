@@ -16,12 +16,8 @@ A streaming + batch lakehouse for Air Quality Index (AQI) data, built entirely o
 ---
 
 ## Architecture
-
-<<<<<<< HEAD
 ![AQI Tracking System architecture][def]
-=======
-![AQI Tracking System architecture](docs/screenshots/architecture.svg)
->>>>>>> 6be6d47f71fdbcf606b11d3e2e97eaaed3faf195
+
 
 
 ### Data flow
@@ -52,7 +48,6 @@ A streaming + batch lakehouse for Air Quality Index (AQI) data, built entirely o
 
 ---
 
-<<<<<<< HEAD
 =======
 ## Documentation
 
