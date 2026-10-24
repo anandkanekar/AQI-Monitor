@@ -1,22 +1,260 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1650" height="1060" viewBox="0 0 1650 1060">
+<svg xmlns="http://www.w3.org/2000/svg" width="1730" height="1140" viewBox="0 0 1730 1140">
 <defs>
-  <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
-    <path d="M0,0 L9,4.5 L0,9 z" fill="#455a64"/>
-  </marker>
+  <marker id="ah" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#455a64"/></marker>
   <style>
-text { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #263238; }
-.zone-title { font-size: 15px; font-weight: 700; fill: #37474f; }
-.zone-caption { font-size: 11px; font-style: italic; fill: #78909c; }
+text { font-family: 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #263238; }
+.title { font-size: 24px; font-weight: 700; }
+.subtitle { font-size: 13px; fill: #607d8b; }
+.zone-title { font-size: 14px; font-weight: 700; }
+.zone-caption { font-size: 11px; fill: #607d8b; }
+.sub-title { font-size: 11.5px; font-weight: 600; fill: #37474f; }
 .box-title { font-size: 12.5px; font-weight: 600; }
-.box-sub { font-size: 10.5px; fill: #546e7a; }
-.arrow-label { font-size: 11px; fill: #37474f; font-style: italic; }
-.arrow-label-sm { font-size: 9.5px; fill: #78909c; font-style: italic; }
-.pill { font-size: 11px; fill: #33691e; }
-.title { font-size: 23px; font-weight: 700; }
-.subtitle { font-size: 12.5px; fill: #607d8b; }
+.box-title-mono { font-size: 12.5px; font-weight: 600;
+  font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace; }
+.box-sub { font-size: 10.5px; fill: #607d8b; }
+.pill { font-size: 11px; fill: #2e7d32; }
+.edge-label { font-size: 10.5px; fill: #37474f; }
+.legend { font-size: 11.5px; fill: #37474f; }
 </style>
 </defs>
-<rect width="1650" height="1060" fill="#ffffff"/>
-<text x="30" y="40" class="title">AQI Tracking System — Architecture</text>
-<text x="30" y="62" class="subtitle">Streaming ingestion &amp; detection (top) · lakehouse storage, ETL &amp; BI (middle) · production roadmap (bottom) — Docker Compose reference deployment</text>
-<rect x="20" y="95" width="306" height="335" rx="14" fill="#eceff1" stroke="#90a4ae" stroke-width="1.6"/><text x="36" y="122" class="zone-title">Sources</text><rect x="40" y="140" width="266" height="56" rx="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.4"/><text x="173.0" y="161" class="box-title" text-anchor="middle">Sensor fleet</text><text x="173.0" y="176.5" class="box-sub" text-anchor="middle">generator/sensor_simulator.py</text><rect x="40" y="206" width="266" height="56" rx="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.4"/><text x="173.0" y="227" class="box-title" text-anchor="middle">JSON reading</text><text x="173.0" y="242.5" class="box-sub" text-anchor="middle">PM2.5 · PM10 · NO2 · O3 · CO2</text><rect x="40" y="272" width="266" height="80" rx="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.4"/><text x="173.0" y="293" class="box-title" text-anchor="middle">8 simulated cities</text><text x="173.0" y="308.5" class="box-sub" text-anchor="middle">diurnal traffic pattern +</text><text x="173.0" y="324.0" class="box-sub" text-anchor="middle">fault injection (spikes, dropouts,</text><text x="173.0" y="339.5" class="box-sub" text-anchor="middle">stuck sensors)</text><rect x="346" y="95" width="306" height="335" rx="14" fill="#fff8e1" stroke="#f9a825" stroke-width="1.6"/><text x="362" y="122" class="zone-title">Kafka 3.8 (KRaft)</text><rect x="366" y="140" width="266" height="46" rx="8" fill="#fffde7" stroke="#546e7a" stroke-width="1.4"/><text x="499.0" y="161" class="box-title" text-anchor="middle">aqi.raw</text><text x="499.0" y="176.5" class="box-sub" text-anchor="middle">12 partitions · key=sensor_id</text><rect x="366" y="196" width="266" height="36" rx="8" fill="#fffde7" stroke="#546e7a" stroke-width="1.4"/><text x="499.0" y="219.0" class="box-title" text-anchor="middle">aqi.enriched</text><rect x="366" y="242" width="266" height="36" rx="8" fill="#fffde7" stroke="#546e7a" stroke-width="1.4"/><text x="499.0" y="265.0" class="box-title" text-anchor="middle">aqi.alerts</text><rect x="366" y="288" width="266" height="36" rx="8" fill="#fffde7" stroke="#546e7a" stroke-width="1.4"/><text x="499.0" y="311.0" class="box-title" text-anchor="middle">aqi.anomalies</text><rect x="366" y="334" width="266" height="46" rx="8" fill="#fffde7" stroke="#546e7a" stroke-width="1.4"/><text x="499.0" y="355" class="box-title" text-anchor="middle">aqi.dlq</text><text x="499.0" y="370.5" class="box-sub" text-anchor="middle">malformed messages</text><rect x="672" y="95" width="306" height="335" rx="14" fill="#e3f2fd" stroke="#1e88e5" stroke-width="1.6"/><text x="688" y="122" class="zone-title">Flink 1.18 Cluster</text><rect x="692" y="145" width="266" height="115" rx="8" fill="#e1f5fe" stroke="#546e7a" stroke-width="1.4"/><text x="825.0" y="166" class="box-title" text-anchor="middle">aqi-detection</text><text x="825.0" y="181.5" class="box-sub" text-anchor="middle">AQI calc (EPA breakpoints)</text><text x="825.0" y="197.0" class="box-sub" text-anchor="middle">threshold alerts (warn/critical/emergency)</text><text x="825.0" y="212.5" class="box-sub" text-anchor="middle">EWMA anomaly detection</text><text x="825.0" y="228.0" class="box-sub" text-anchor="middle">checkpointed per-sensor state</text><rect x="692" y="270" width="266" height="100" rx="8" fill="#e1f5fe" stroke="#546e7a" stroke-width="1.4"/><text x="825.0" y="291" class="box-title" text-anchor="middle">aqi-landing-zone</text><text x="825.0" y="306.5" class="box-sub" text-anchor="middle">Flink SQL file sink</text><text x="825.0" y="322.0" class="box-sub" text-anchor="middle">exactly-once JSON archive</text><text x="825.0" y="337.5" class="box-sub" text-anchor="middle">committed every checkpoint (~60s)</text><rect x="998" y="95" width="306" height="335" rx="14" fill="#fce4ec" stroke="#d81b60" stroke-width="1.6"/><text x="1014" y="122" class="zone-title">Monitoring &amp; Alerting</text><rect x="1018" y="140" width="266" height="64" rx="8" fill="#fdf2f6" stroke="#546e7a" stroke-width="1.4"/><text x="1151.0" y="161" class="box-title" text-anchor="middle">aqi-exporter · kafka-exporter</text><text x="1151.0" y="176.5" class="box-sub" text-anchor="middle">business metrics + consumer lag</text><text x="1151.0" y="192.0" class="box-sub" text-anchor="middle">→ Prometheus /metrics</text><rect x="1018" y="214" width="266" height="64" rx="8" fill="#fdf2f6" stroke="#546e7a" stroke-width="1.4"/><text x="1151.0" y="235" class="box-title" text-anchor="middle">Prometheus</text><text x="1151.0" y="250.5" class="box-sub" text-anchor="middle">pipeline-health + AQI threshold rules</text><text x="1151.0" y="266.0" class="box-sub" text-anchor="middle">monitoring/prometheus/rules/*.yml</text><rect x="1018" y="288" width="266" height="64" rx="8" fill="#fdf2f6" stroke="#546e7a" stroke-width="1.4"/><text x="1151.0" y="309" class="box-title" text-anchor="middle">Alertmanager</text><text x="1151.0" y="324.5" class="box-sub" text-anchor="middle">severity routing + cooldown</text><text x="1151.0" y="340.0" class="box-sub" text-anchor="middle">inhibition rules</text><rect x="1324" y="95" width="306" height="335" rx="14" fill="#ffebee" stroke="#e53935" stroke-width="1.6"/><text x="1340" y="122" class="zone-title">Notification Channels</text><rect x="1344" y="145" width="266" height="60" rx="8" fill="#fff0f0" stroke="#546e7a" stroke-width="1.4"/><text x="1477.0" y="166" class="box-title" text-anchor="middle">Email</text><text x="1477.0" y="181.5" class="box-sub" text-anchor="middle">Mailpit (dev) / SMTP relay</text><rect x="1344" y="215" width="266" height="60" rx="8" fill="#fff0f0" stroke="#546e7a" stroke-width="1.4"/><text x="1477.0" y="236" class="box-title" text-anchor="middle">Slack</text><text x="1477.0" y="251.5" class="box-sub" text-anchor="middle">incoming webhook</text><rect x="1344" y="285" width="266" height="60" rx="8" fill="#fff0f0" stroke="#546e7a" stroke-width="1.4"/><text x="1477.0" y="306" class="box-title" text-anchor="middle">SMS</text><text x="1477.0" y="321.5" class="box-sub" text-anchor="middle">webhook → Twilio / SNS relay</text><rect x="20" y="465" width="306" height="300" rx="14" fill="#eceff1" stroke="#90a4ae" stroke-width="1.6"/><text x="36" y="492" class="zone-title">Users &amp; Access</text><rect x="40" y="510" width="266" height="80" rx="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.4"/><text x="173.0" y="531" class="box-title" text-anchor="middle">Data analysts &amp; BI tools</text><text x="173.0" y="546.5" class="box-sub" text-anchor="middle">Trino JDBC/ODBC, DuckDB,</text><text x="173.0" y="562.0" class="box-sub" text-anchor="middle">Superset, Metabase, ...</text><rect x="40" y="605" width="266" height="70" rx="8" fill="#ffffff" stroke="#9e9e9e" stroke-width="1.4" stroke-dasharray="6,4"/><text x="173.0" y="626" class="box-title" text-anchor="middle">Public API</text><text x="173.0" y="641.5" class="box-sub" text-anchor="middle">planned — see Roadmap</text><rect x="346" y="465" width="632" height="300" rx="14" fill="#e8f5e9" stroke="#43a047" stroke-width="1.6"/><text x="362" y="492" class="zone-title">Storage Lakehouse</text><text x="362" y="510" class="zone-caption">MinIO (S3) buckets</text><rect x="366" y="505" width="592" height="28" rx="14.0" fill="#f1f8e9" stroke="#8d6e63" stroke-width="1.2"/><text x="662.0" y="523.0" class="pill" text-anchor="middle">landing/aqi/raw  (JSON, dt=/hour=)</text><rect x="366" y="538" width="592" height="28" rx="14.0" fill="#f1f8e9" stroke="#8d6e63" stroke-width="1.2"/><text x="662.0" y="556.0" class="pill" text-anchor="middle">processed/  (curated + analytics Parquet)</text><rect x="366" y="571" width="592" height="28" rx="14.0" fill="#f1f8e9" stroke="#8d6e63" stroke-width="1.2"/><text x="662.0" y="589.0" class="pill" text-anchor="middle">flink/checkpoints</text><rect x="366" y="604" width="592" height="28" rx="14.0" fill="#f1f8e9" stroke="#8d6e63" stroke-width="1.2"/><text x="662.0" y="622.0" class="pill" text-anchor="middle">warehouse/  (Hive metastore dir)</text><text x="366" y="650" class="zone-caption">Catalog &amp; query engine</text><rect x="366" y="660" width="189.33333333333334" height="64" rx="8" fill="#f8f0fa" stroke="#546e7a" stroke-width="1.4"/><text x="460.6666666666667" y="681" class="box-title" text-anchor="middle">Postgres</text><text x="460.6666666666667" y="696.5" class="box-sub" text-anchor="middle">metastore + airflow DB</text><rect x="567.3333333333334" y="660" width="189.33333333333334" height="64" rx="8" fill="#f8f0fa" stroke="#546e7a" stroke-width="1.4"/><text x="662.0" y="681" class="box-title" text-anchor="middle">Hive Metastore 4.0</text><text x="662.0" y="696.5" class="box-sub" text-anchor="middle">thrift catalog (:9083)</text><rect x="768.6666666666667" y="660" width="189.33333333333334" height="64" rx="8" fill="#f8f0fa" stroke="#546e7a" stroke-width="1.4"/><text x="863.3333333333334" y="681" class="box-title" text-anchor="middle">Trino 455</text><text x="863.3333333333334" y="696.5" class="box-sub" text-anchor="middle">SQL query engine (:8080)</text><rect x="998" y="465" width="306" height="300" rx="14" fill="#e0f7fa" stroke="#00acc1" stroke-width="1.6"/><text x="1014" y="492" class="zone-title">Orchestration — Airflow 2.10</text><text x="1014" y="510" class="zone-caption">aqi_daily_aggregation (00:30 UTC daily)</text><rect x="1018" y="522" width="266" height="58" rx="8" fill="#e0f2f1" stroke="#546e7a" stroke-width="1.4"/><text x="1151.0" y="543" class="box-title" text-anchor="middle">1. Sync &amp; curate</text><text x="1151.0" y="558.5" class="box-sub" text-anchor="middle">register partitions, dedupe,</text><text x="1151.0" y="574.0" class="box-sub" text-anchor="middle">AQI calc → curated Parquet</text><rect x="1018" y="588" width="266" height="58" rx="8" fill="#e0f2f1" stroke="#546e7a" stroke-width="1.4"/><text x="1151.0" y="609" class="box-title" text-anchor="middle">2. Daily aggregates</text><text x="1151.0" y="624.5" class="box-sub" text-anchor="middle">per-sensor &amp; per-city rollups</text><text x="1151.0" y="640.0" class="box-sub" text-anchor="middle">+ data-quality checks</text><rect x="1018" y="654" width="266" height="58" rx="8" fill="#e0f2f1" stroke="#546e7a" stroke-width="1.4"/><text x="1151.0" y="675" class="box-title" text-anchor="middle">3. Weekly reports</text><text x="1151.0" y="690.5" class="box-sub" text-anchor="middle">weekly city trend + league table</text><text x="1151.0" y="706.0" class="box-sub" text-anchor="middle">ANALYZE (query stats)</text><rect x="1324" y="465" width="306" height="300" rx="14" fill="#f3e5f5" stroke="#8e24aa" stroke-width="1.6"/><text x="1340" y="492" class="zone-title">Dashboards — Grafana 11</text><rect x="1344" y="505" width="266" height="95" rx="8" fill="#fdf2f6" stroke="#546e7a" stroke-width="1.4"/><text x="1477.0" y="526" class="box-title" text-anchor="middle">AQI Overview</text><text x="1477.0" y="541.5" class="box-sub" text-anchor="middle">current worst/median AQI</text><text x="1477.0" y="557.0" class="box-sub" text-anchor="middle">AQI-by-city bar &amp; trend</text><text x="1477.0" y="572.5" class="box-sub" text-anchor="middle">pollutant explorer, top sensors</text><text x="1477.0" y="588.0" class="box-sub" text-anchor="middle">firing alerts, category timeline</text><rect x="1344" y="610" width="266" height="95" rx="8" fill="#fdf2f6" stroke="#546e7a" stroke-width="1.4"/><text x="1477.0" y="631" class="box-title" text-anchor="middle">Pipeline Health</text><text x="1477.0" y="646.5" class="box-sub" text-anchor="middle">Flink job / TaskManager status</text><text x="1477.0" y="662.0" class="box-sub" text-anchor="middle">Kafka consumer lag per partition</text><text x="1477.0" y="677.5" class="box-sub" text-anchor="middle">checkpoints, restarts, backpressure</text><text x="1477.0" y="693.0" class="box-sub" text-anchor="middle">MinIO capacity &amp; requests</text><rect x="20" y="800" width="1610" height="170" rx="14" fill="#f5f5f5" stroke="#9e9e9e" stroke-width="1.6" stroke-dasharray="8,5"/><text x="36" y="827" class="zone-title">Production Roadmap — not yet implemented (see README §10)</text><rect x="40.0" y="855" width="250.0" height="90" rx="8" fill="#fafafa" stroke="#9e9e9e" stroke-width="1.4" stroke-dasharray="6,4"/><text x="165.0" y="876" class="box-title" text-anchor="middle">Flink on Kubernetes</text><text x="165.0" y="891.5" class="box-sub" text-anchor="middle">Flink Operator, JobManager HA,</text><text x="165.0" y="907.0" class="box-sub" text-anchor="middle">RocksDB + savepoints</text><rect x="304.0" y="855" width="250.0" height="90" rx="8" fill="#fafafa" stroke="#9e9e9e" stroke-width="1.4" stroke-dasharray="6,4"/><text x="429.0" y="876" class="box-title" text-anchor="middle">HA Kafka Cluster</text><text x="429.0" y="891.5" class="box-sub" text-anchor="middle">3+ brokers, TLS/SASL,</text><text x="429.0" y="907.0" class="box-sub" text-anchor="middle">min.insync.replicas=2</text><rect x="568.0" y="855" width="250.0" height="90" rx="8" fill="#fafafa" stroke="#9e9e9e" stroke-width="1.4" stroke-dasharray="6,4"/><text x="693.0" y="876" class="box-title" text-anchor="middle">Erasure-coded MinIO</text><text x="693.0" y="891.5" class="box-sub" text-anchor="middle">distributed mode,</text><text x="693.0" y="907.0" class="box-sub" text-anchor="middle">per-zone bucket policies</text><rect x="832.0" y="855" width="250.0" height="90" rx="8" fill="#fafafa" stroke="#9e9e9e" stroke-width="1.4" stroke-dasharray="6,4"/><text x="957.0" y="876" class="box-title" text-anchor="middle">Apache Iceberg Tables</text><text x="957.0" y="891.5" class="box-sub" text-anchor="middle">ACID MERGE, schema evolution,</text><text x="957.0" y="907.0" class="box-sub" text-anchor="middle">time travel</text><rect x="1096.0" y="855" width="250.0" height="90" rx="8" fill="#fafafa" stroke="#9e9e9e" stroke-width="1.4" stroke-dasharray="6,4"/><text x="1221.0" y="876" class="box-title" text-anchor="middle">CI/CD Pipeline</text><text x="1221.0" y="891.5" class="box-sub" text-anchor="middle">pytest + compose config +</text><text x="1221.0" y="907.0" class="box-sub" text-anchor="middle">image smoke tests on every PR</text><rect x="1360.0" y="855" width="250.0" height="90" rx="8" fill="#fafafa" stroke="#9e9e9e" stroke-width="1.4" stroke-dasharray="6,4"/><text x="1485.0" y="876" class="box-title" text-anchor="middle">Secrets Management</text><text x="1485.0" y="891.5" class="box-sub" text-anchor="middle">Vault / cloud secrets manager,</text><text x="1485.0" y="907.0" class="box-sub" text-anchor="middle">no plaintext env vars</text><line x1="326" y1="392" x2="346" y2="392" stroke="#455a64" stroke-width="2" marker-end="url(#ah)"/><text x="336.0" y="382" class="arrow-label" text-anchor="middle">produce (key=sensor_id)</text><line x1="652" y1="392" x2="672" y2="392" stroke="#455a64" stroke-width="2" marker-end="url(#ah)"/><text x="662.0" y="382" class="arrow-label" text-anchor="middle">consume aqi.raw</text><line x1="672" y1="412" x2="652" y2="412" stroke="#455a64" stroke-width="2" marker-end="url(#ah)"/><text x="662.0" y="424" class="arrow-label" text-anchor="middle">produce: enriched / alerts / anomalies / dlq</text><line x1="978" y1="400" x2="998" y2="400" stroke="#455a64" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#ah)"/><text x="988.0" y="388" class="arrow-label" text-anchor="middle">metrics :9249</text><line x1="1304" y1="400" x2="1324" y2="400" stroke="#455a64" stroke-width="2" marker-end="url(#ah)"/><text x="1314.0" y="388" class="arrow-label" text-anchor="middle">notify</text><polyline points="499,430 499,445 1151,445 1151,430" fill="none" stroke="#455a64" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#ah)"/><text x="910" y="437" class="arrow-label" text-anchor="middle">consumer lag + business metrics</text><line x1="865.0" y1="430" x2="865.0" y2="465" stroke="#455a64" stroke-width="2" marker-end="url(#ah)"/><text x="770.0" y="450" class="arrow-label" text-anchor="middle">JSON files</text><polyline points="1151.0,430 1151.0,457 1477.0,457 1477.0,465" fill="none" stroke="#455a64" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#ah)"/><text x="1314.0" y="471" class="arrow-label" text-anchor="middle">PromQL</text><line x1="998" y1="733" x2="978" y2="733" stroke="#455a64" stroke-width="2" marker-end="url(#ah)"/><text x="988.0" y="721" class="arrow-label" text-anchor="middle">Trino SQL (ETL)</text><line x1="326" y1="733" x2="346" y2="733" stroke="#455a64" stroke-width="2" marker-end="url(#ah)"/><text x="336.0" y="721" class="arrow-label" text-anchor="middle">SQL / API access</text><text x="336.0" y="749" class="arrow-label-sm" text-anchor="middle">JDBC, ODBC, Trino</text><polyline points="888,765 888,782 1477.0,782 1477.0,765" fill="none" stroke="#455a64" stroke-width="2" marker-end="url(#ah)"/><text x="1182.5" y="797" class="arrow-label" text-anchor="middle">Trino SQL (historical panels)</text><line x1="30" y1="1005" x2="70" y2="1005" stroke="#455a64" stroke-width="2" marker-end="url(#ah)"/><text x="78" y="1009" class="arrow-label">data flow</text><line x1="170" y1="1005" x2="210" y2="1005" stroke="#455a64" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#ah)"/><text x="218" y="1009" class="arrow-label">metrics / state</text><rect x="345" y="995" width="26" height="18" rx="4" fill="#fafafa" stroke="#9e9e9e" stroke-width="1.4" stroke-dasharray="6,4"/><text x="378" y="1009" class="arrow-label">planned / roadmap (not yet implemented)</text></svg>
+<rect width="1730" height="1140" fill="#ffffff"/>
+<text x="40" y="46" class="title" text-anchor="start">AQI Monitor — System Architecture</text>
+<text x="40" y="70" class="subtitle" text-anchor="start">Real-time detection on Kafka + Flink, lakehouse analytics on MinIO + Trino, observability with Prometheus + Grafana · Docker Compose reference deployment</text>
+<rect x="40" y="130" width="250" height="310" rx="10" fill="#ffffff"/>
+<path d="M40,170 V140 a10,10 0 0 1 10,-10 H280 a10,10 0 0 1 10,10 V170 Z" fill="#eceff1"/>
+<line x1="40" y1="170" x2="290" y2="170" stroke="#546e7a" stroke-opacity="0.35"/>
+<rect x="40" y="130" width="250" height="310" rx="10" fill="none" stroke="#546e7a" stroke-width="1.5"/>
+<circle cx="58" cy="150" r="4.5" fill="#546e7a"/>
+<text x="70" y="155" class="zone-title" text-anchor="start">Data Sources</text>
+<rect x="60" y="192" width="210" height="64" rx="6" fill="#f7f9fa" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="165.0" y="220.0" class="box-title" text-anchor="middle">Sensor fleet</text>
+<text x="165.0" y="236.0" class="box-sub" text-anchor="middle">8 cities · diurnal traffic pattern</text>
+<rect x="60" y="276" width="210" height="64" rx="6" fill="#f7f9fa" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="165.0" y="304.0" class="box-title" text-anchor="middle">JSON reading</text>
+<text x="165.0" y="320.0" class="box-sub" text-anchor="middle">PM2.5 · PM10 · NO2 · O3 · CO2</text>
+<rect x="60" y="360" width="210" height="64" rx="6" fill="#f7f9fa" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="165.0" y="388.0" class="box-title" text-anchor="middle">Kafka producer</text>
+<text x="165.0" y="404.0" class="box-sub" text-anchor="middle">generator/sensor_simulator.py</text>
+<rect x="390" y="130" width="250" height="310" rx="10" fill="#ffffff"/>
+<path d="M390,170 V140 a10,10 0 0 1 10,-10 H630 a10,10 0 0 1 10,10 V170 Z" fill="#fff3e0"/>
+<line x1="390" y1="170" x2="640" y2="170" stroke="#ef6c00" stroke-opacity="0.35"/>
+<rect x="390" y="130" width="250" height="310" rx="10" fill="none" stroke="#ef6c00" stroke-width="1.5"/>
+<circle cx="408" cy="150" r="4.5" fill="#ef6c00"/>
+<text x="420" y="155" class="zone-title" text-anchor="start">Apache Kafka</text>
+<text x="626" y="155" class="zone-caption" text-anchor="end">KRaft</text>
+<rect x="410" y="192" width="210" height="40" rx="6" fill="#fffaf3" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="515.0" y="208.0" class="box-title-mono" text-anchor="middle">aqi.enriched</text>
+<text x="515.0" y="224.0" class="box-sub" text-anchor="middle">reading + computed AQI</text>
+<rect x="410" y="240" width="210" height="40" rx="6" fill="#fffaf3" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="515.0" y="256.0" class="box-title-mono" text-anchor="middle">aqi.alerts</text>
+<text x="515.0" y="272.0" class="box-sub" text-anchor="middle">threshold alerts</text>
+<rect x="410" y="288" width="210" height="40" rx="6" fill="#fffaf3" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="515.0" y="304.0" class="box-title-mono" text-anchor="middle">aqi.anomalies</text>
+<text x="515.0" y="320.0" class="box-sub" text-anchor="middle">spikes · drops · stuck</text>
+<rect x="410" y="336" width="210" height="40" rx="6" fill="#fffaf3" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="515.0" y="352.0" class="box-title-mono" text-anchor="middle">aqi.dlq</text>
+<text x="515.0" y="368.0" class="box-sub" text-anchor="middle">malformed messages</text>
+<rect x="410" y="384" width="210" height="40" rx="6" fill="#fffaf3" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="515.0" y="400.0" class="box-title-mono" text-anchor="middle">aqi.raw</text>
+<text x="515.0" y="416.0" class="box-sub" text-anchor="middle">12 partitions · key = sensor_id</text>
+<rect x="740" y="130" width="250" height="310" rx="10" fill="#ffffff"/>
+<path d="M740,170 V140 a10,10 0 0 1 10,-10 H980 a10,10 0 0 1 10,10 V170 Z" fill="#e3f2fd"/>
+<line x1="740" y1="170" x2="990" y2="170" stroke="#1565c0" stroke-opacity="0.35"/>
+<rect x="740" y="130" width="250" height="310" rx="10" fill="none" stroke="#1565c0" stroke-width="1.5"/>
+<circle cx="758" cy="150" r="4.5" fill="#1565c0"/>
+<text x="770" y="155" class="zone-title" text-anchor="start">Apache Flink</text>
+<text x="976" y="155" class="zone-caption" text-anchor="end">PyFlink</text>
+<rect x="760" y="192" width="210" height="126" rx="6" fill="#f5faff" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="865.0" y="228.5" class="box-title-mono" text-anchor="middle">aqi-detection</text>
+<text x="865.0" y="244.5" class="box-sub" text-anchor="middle">US EPA AQI calculation</text>
+<text x="865.0" y="259.5" class="box-sub" text-anchor="middle">threshold alerts + cooldown</text>
+<text x="865.0" y="274.5" class="box-sub" text-anchor="middle">EWMA anomaly detection</text>
+<text x="865.0" y="289.5" class="box-sub" text-anchor="middle">checkpointed per-sensor state</text>
+<rect x="760" y="330" width="210" height="94" rx="6" fill="#f5faff" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="865.0" y="358.0" class="box-title-mono" text-anchor="middle">aqi-landing-zone</text>
+<text x="865.0" y="374.0" class="box-sub" text-anchor="middle">Flink SQL filesystem sink</text>
+<text x="865.0" y="389.0" class="box-sub" text-anchor="middle">exactly-once JSON archive</text>
+<text x="865.0" y="404.0" class="box-sub" text-anchor="middle">commit per checkpoint (~60 s)</text>
+<rect x="1090" y="130" width="250" height="310" rx="10" fill="#ffffff"/>
+<path d="M1090,170 V140 a10,10 0 0 1 10,-10 H1330 a10,10 0 0 1 10,10 V170 Z" fill="#fdecea"/>
+<line x1="1090" y1="170" x2="1340" y2="170" stroke="#c62828" stroke-opacity="0.35"/>
+<rect x="1090" y="130" width="250" height="310" rx="10" fill="none" stroke="#c62828" stroke-width="1.5"/>
+<circle cx="1108" cy="150" r="4.5" fill="#c62828"/>
+<text x="1120" y="155" class="zone-title" text-anchor="start">Monitoring &amp; Alerting</text>
+<rect x="1110" y="192" width="210" height="64" rx="6" fill="#fff8f7" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="1215.0" y="220.0" class="box-title" text-anchor="middle">aqi-exporter · kafka-exporter</text>
+<text x="1215.0" y="236.0" class="box-sub" text-anchor="middle">AQI business metrics · consumer lag</text>
+<rect x="1110" y="276" width="210" height="64" rx="6" fill="#fff8f7" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="1215.0" y="304.0" class="box-title" text-anchor="middle">Prometheus</text>
+<text x="1215.0" y="320.0" class="box-sub" text-anchor="middle">pipeline-health + AQI threshold rules</text>
+<rect x="1110" y="360" width="210" height="64" rx="6" fill="#fff8f7" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="1215.0" y="388.0" class="box-title" text-anchor="middle">Alertmanager</text>
+<text x="1215.0" y="404.0" class="box-sub" text-anchor="middle">severity routing · inhibition</text>
+<rect x="1440" y="130" width="250" height="310" rx="10" fill="#ffffff"/>
+<path d="M1440,170 V140 a10,10 0 0 1 10,-10 H1680 a10,10 0 0 1 10,10 V170 Z" fill="#f3e5f5"/>
+<line x1="1440" y1="170" x2="1690" y2="170" stroke="#6a1b9a" stroke-opacity="0.35"/>
+<rect x="1440" y="130" width="250" height="310" rx="10" fill="none" stroke="#6a1b9a" stroke-width="1.5"/>
+<circle cx="1458" cy="150" r="4.5" fill="#6a1b9a"/>
+<text x="1470" y="155" class="zone-title" text-anchor="start">Notification Channels</text>
+<rect x="1460" y="192" width="210" height="64" rx="6" fill="#fcf7fd" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="1565.0" y="220.0" class="box-title" text-anchor="middle">Email</text>
+<text x="1565.0" y="236.0" class="box-sub" text-anchor="middle">SMTP relay (Mailpit in dev)</text>
+<rect x="1460" y="276" width="210" height="64" rx="6" fill="#fcf7fd" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="1565.0" y="304.0" class="box-title" text-anchor="middle">Slack</text>
+<text x="1565.0" y="320.0" class="box-sub" text-anchor="middle">incoming webhook</text>
+<rect x="1460" y="360" width="210" height="64" rx="6" fill="#fcf7fd" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="1565.0" y="388.0" class="box-title" text-anchor="middle">SMS</text>
+<text x="1565.0" y="404.0" class="box-sub" text-anchor="middle">webhook → Twilio / SNS relay</text>
+<path d="M270,404 L410,404" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="340.0" y="382" class="edge-label" text-anchor="middle">produce</text>
+<text x="340.0" y="395" class="edge-label" text-anchor="middle">key = sensor_id</text>
+<path d="M620,404 L760,404" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#ah)"/>
+<path d="M730,404 L730,290 L760,290" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="670" y="394" class="edge-label" text-anchor="middle">consume aqi.raw</text>
+<path d="M760,212 L640,212 L640,356" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M640,212 L620,212" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#ah)"/>
+<path d="M640,260 L620,260" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#ah)"/>
+<path d="M640,308 L620,308" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#ah)"/>
+<path d="M640,356 L620,356" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="700.0" y="204" class="edge-label" text-anchor="middle">produce</text>
+<path d="M970,308 L1110,308" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="6,4" marker-end="url(#ah)"/>
+<text x="1040.0" y="300" class="edge-label" text-anchor="middle">metrics :9249</text>
+<path d="M1215.0,256 L1215.0,276" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="6,4" marker-end="url(#ah)"/>
+<path d="M1215.0,340 L1215.0,360" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#ah)"/>
+<path d="M1320,392 L1390,392 L1390,224" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M1390,224 L1460,224" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#ah)"/>
+<path d="M1390,308 L1460,308" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#ah)"/>
+<path d="M1390,392 L1460,392" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="1355.0" y="384" class="edge-label" text-anchor="middle">route</text>
+<path d="M515.0,130 L515.0,108 L1215.0,108 L1215.0,192" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="6,4" marker-end="url(#ah)"/>
+<text x="865.0" y="102" class="edge-label" text-anchor="middle">topic consumption · consumer-group lag</text>
+<rect x="40" y="530" width="250" height="320" rx="10" fill="#ffffff"/>
+<path d="M40,570 V540 a10,10 0 0 1 10,-10 H280 a10,10 0 0 1 10,10 V570 Z" fill="#eceff1"/>
+<line x1="40" y1="570" x2="290" y2="570" stroke="#546e7a" stroke-opacity="0.35"/>
+<rect x="40" y="530" width="250" height="320" rx="10" fill="none" stroke="#546e7a" stroke-width="1.5"/>
+<circle cx="58" cy="550" r="4.5" fill="#546e7a"/>
+<text x="70" y="555" class="zone-title" text-anchor="start">Users &amp; Access</text>
+<rect x="60" y="594" width="210" height="50" rx="6" fill="#f7f9fa" stroke="#b0bec5" stroke-width="1.2" stroke-dasharray="5,4"/>
+<text x="165.0" y="615.0" class="box-title" text-anchor="middle">Public API</text>
+<text x="165.0" y="631.0" class="box-sub" text-anchor="middle">planned — see roadmap</text>
+<rect x="60" y="689" width="210" height="50" rx="6" fill="#f7f9fa" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="165.0" y="710.0" class="box-title" text-anchor="middle">On-call engineers</text>
+<text x="165.0" y="726.0" class="box-sub" text-anchor="middle">Grafana · Slack · Email · SMS</text>
+<rect x="60" y="784" width="210" height="50" rx="6" fill="#f7f9fa" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="165.0" y="805.0" class="box-title" text-anchor="middle">Analysts &amp; BI tools</text>
+<text x="165.0" y="821.0" class="box-sub" text-anchor="middle">Superset · Metabase · DBeaver</text>
+<rect x="390" y="530" width="600" height="320" rx="10" fill="#ffffff"/>
+<path d="M390,570 V540 a10,10 0 0 1 10,-10 H980 a10,10 0 0 1 10,10 V570 Z" fill="#e8f5e9"/>
+<line x1="390" y1="570" x2="990" y2="570" stroke="#2e7d32" stroke-opacity="0.35"/>
+<rect x="390" y="530" width="600" height="320" rx="10" fill="none" stroke="#2e7d32" stroke-width="1.5"/>
+<circle cx="408" cy="550" r="4.5" fill="#2e7d32"/>
+<text x="420" y="555" class="zone-title" text-anchor="start">Lakehouse — Storage, Catalog &amp; Query</text>
+<rect x="410" y="584" width="560" height="102" rx="6" fill="#f6fbf6" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="424" y="603" class="sub-title" text-anchor="start">Object storage — MinIO (S3 API)</text>
+<rect x="425" y="614" width="260.0" height="26" rx="13.0" fill="#ffffff" stroke="#81c784" stroke-width="1.1"/>
+<text x="555.0" y="631.0" class="pill" text-anchor="middle">landing/ — raw JSON (dt, hour)</text>
+<rect x="695.0" y="614" width="260.0" height="26" rx="13.0" fill="#ffffff" stroke="#81c784" stroke-width="1.1"/>
+<text x="825.0" y="631.0" class="pill" text-anchor="middle">processed/ — curated Parquet</text>
+<rect x="425" y="650" width="260.0" height="26" rx="13.0" fill="#ffffff" stroke="#81c784" stroke-width="1.1"/>
+<text x="555.0" y="667.0" class="pill" text-anchor="middle">flink/ — checkpoints</text>
+<rect x="695.0" y="650" width="260.0" height="26" rx="13.0" fill="#ffffff" stroke="#81c784" stroke-width="1.1"/>
+<text x="825.0" y="667.0" class="pill" text-anchor="middle">warehouse/ — Hive tables</text>
+<rect x="410" y="704" width="220" height="58" rx="6" fill="#f6fbf6" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="520.0" y="729.0" class="box-title" text-anchor="middle">Hive Metastore</text>
+<text x="520.0" y="745.0" class="box-sub" text-anchor="middle">Thrift catalog · :9083</text>
+<rect x="660" y="704" width="220" height="58" rx="6" fill="#f6fbf6" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="770.0" y="729.0" class="box-title" text-anchor="middle">PostgreSQL</text>
+<text x="770.0" y="745.0" class="box-sub" text-anchor="middle">metastore + Airflow DB</text>
+<path d="M630,733 L660,733" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#ah)"/>
+<rect x="410" y="784" width="560" height="50" rx="6" fill="#f6fbf6" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="690.0" y="805.0" class="box-title" text-anchor="middle">Trino</text>
+<text x="690.0" y="821.0" class="box-sub" text-anchor="middle">distributed SQL engine · :8080</text>
+<path d="M520,784 L520,762" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#ah)"/>
+<path d="M925,784 L925,686" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="933" y="738" class="edge-label" text-anchor="start">S3</text>
+<rect x="1090" y="530" width="250" height="320" rx="10" fill="#ffffff"/>
+<path d="M1090,570 V540 a10,10 0 0 1 10,-10 H1330 a10,10 0 0 1 10,10 V570 Z" fill="#e0f7fa"/>
+<line x1="1090" y1="570" x2="1340" y2="570" stroke="#00838f" stroke-opacity="0.35"/>
+<rect x="1090" y="530" width="250" height="320" rx="10" fill="none" stroke="#00838f" stroke-width="1.5"/>
+<circle cx="1108" cy="550" r="4.5" fill="#00838f"/>
+<text x="1120" y="555" class="zone-title" text-anchor="start">Apache Airflow</text>
+<text x="1326" y="555" class="zone-caption" text-anchor="end">daily 00:30 UTC</text>
+<rect x="1110" y="598" width="210" height="50" rx="6" fill="#f4fdfe" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="1215.0" y="619.0" class="box-title" text-anchor="middle">1 · Sync &amp; curate</text>
+<text x="1215.0" y="635.0" class="box-sub" text-anchor="middle">dedupe · AQI · curated Parquet</text>
+<rect x="1110" y="660" width="210" height="50" rx="6" fill="#f4fdfe" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="1215.0" y="681.0" class="box-title" text-anchor="middle">2 · Quality &amp; daily rollups</text>
+<text x="1215.0" y="697.0" class="box-sub" text-anchor="middle">per-sensor + per-city</text>
+<rect x="1110" y="722" width="210" height="50" rx="6" fill="#f4fdfe" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="1215.0" y="743.0" class="box-title" text-anchor="middle">3 · Weekly rollups</text>
+<text x="1215.0" y="759.0" class="box-sub" text-anchor="middle">city league table · ANALYZE</text>
+<rect x="1110" y="784" width="210" height="50" rx="6" fill="#f4fdfe" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="1215.0" y="805.0" class="box-title" text-anchor="middle">Landing partition sync</text>
+<text x="1215.0" y="821.0" class="box-sub" text-anchor="middle">every 15 minutes</text>
+<rect x="1440" y="530" width="250" height="320" rx="10" fill="#ffffff"/>
+<path d="M1440,570 V540 a10,10 0 0 1 10,-10 H1680 a10,10 0 0 1 10,10 V570 Z" fill="#fce4ec"/>
+<line x1="1440" y1="570" x2="1690" y2="570" stroke="#ad1457" stroke-opacity="0.35"/>
+<rect x="1440" y="530" width="250" height="320" rx="10" fill="none" stroke="#ad1457" stroke-width="1.5"/>
+<circle cx="1458" cy="550" r="4.5" fill="#ad1457"/>
+<text x="1470" y="555" class="zone-title" text-anchor="start">Grafana</text>
+<rect x="1460" y="590" width="210" height="115" rx="6" fill="#fff7fa" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="1565.0" y="621.0" class="box-title" text-anchor="middle">AQI Overview</text>
+<text x="1565.0" y="637.0" class="box-sub" text-anchor="middle">current worst / median AQI</text>
+<text x="1565.0" y="652.0" class="box-sub" text-anchor="middle">AQI by city · pollutant explorer</text>
+<text x="1565.0" y="667.0" class="box-sub" text-anchor="middle">firing alerts · category timeline</text>
+<text x="1565.0" y="682.0" class="box-sub" text-anchor="middle">historical trends (Trino)</text>
+<rect x="1460" y="719" width="210" height="115" rx="6" fill="#fff7fa" stroke="#b0bec5" stroke-width="1.2"/>
+<text x="1565.0" y="750.0" class="box-title" text-anchor="middle">Pipeline Health</text>
+<text x="1565.0" y="766.0" class="box-sub" text-anchor="middle">Flink jobs · TaskManagers</text>
+<text x="1565.0" y="781.0" class="box-sub" text-anchor="middle">Kafka lag per partition</text>
+<text x="1565.0" y="796.0" class="box-sub" text-anchor="middle">checkpoints · backpressure</text>
+<text x="1565.0" y="811.0" class="box-sub" text-anchor="middle">MinIO capacity &amp; requests</text>
+<path d="M270,809.0 L410,809.0" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="330.0" y="800.0" class="edge-label" text-anchor="middle">SQL · JDBC/ODBC</text>
+<path d="M1110,809.0 L970,809.0" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="1040.0" y="800.0" class="edge-label" text-anchor="middle">Trino SQL (ETL)</text>
+<path d="M865.0,424 L865.0,584" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="875.0" y="482" class="edge-label" text-anchor="start">raw JSON files</text>
+<text x="875.0" y="495" class="edge-label" text-anchor="start">+ checkpoints</text>
+<path d="M1300,440 L1300,485 L1565.0,485 L1565.0,590" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="6,4" marker-end="url(#ah)"/>
+<text x="1432.5" y="477" class="edge-label" text-anchor="middle">PromQL (live metrics)</text>
+<path d="M710,834 L710,880 L1565.0,880 L1565.0,834" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="1137.5" y="874" class="edge-label" text-anchor="middle">Trino SQL (historical panels)</text>
+<rect x="40" y="910" width="1650" height="150" rx="10" fill="#ffffff"/>
+<path d="M40,950 V920 a10,10 0 0 1 10,-10 H1680 a10,10 0 0 1 10,10 V950 Z" fill="#f0f0f0"/>
+<line x1="40" y1="950" x2="1690" y2="950" stroke="#757575" stroke-opacity="0.35"/>
+<rect x="40" y="910" width="1650" height="150" rx="10" fill="none" stroke="#757575" stroke-width="1.5" stroke-dasharray="7,5"/>
+<circle cx="58" cy="930" r="4.5" fill="#757575"/>
+<text x="70" y="935" class="zone-title" text-anchor="start">Production Roadmap</text>
+<text x="1676" y="935" class="zone-caption" text-anchor="end">not yet implemented</text>
+<rect x="60.0" y="968" width="255.0" height="72" rx="6" fill="#fafafa" stroke="#b0bec5" stroke-width="1.2" stroke-dasharray="5,4"/>
+<text x="187.5" y="992.5" class="box-title" text-anchor="middle">Flink on Kubernetes</text>
+<text x="187.5" y="1008.5" class="box-sub" text-anchor="middle">Flink Operator · JobManager HA</text>
+<text x="187.5" y="1023.5" class="box-sub" text-anchor="middle">RocksDB + savepoints</text>
+<rect x="331.0" y="968" width="255.0" height="72" rx="6" fill="#fafafa" stroke="#b0bec5" stroke-width="1.2" stroke-dasharray="5,4"/>
+<text x="458.5" y="992.5" class="box-title" text-anchor="middle">HA Kafka cluster</text>
+<text x="458.5" y="1008.5" class="box-sub" text-anchor="middle">3+ brokers · TLS/SASL</text>
+<text x="458.5" y="1023.5" class="box-sub" text-anchor="middle">min.insync.replicas = 2</text>
+<rect x="602.0" y="968" width="255.0" height="72" rx="6" fill="#fafafa" stroke="#b0bec5" stroke-width="1.2" stroke-dasharray="5,4"/>
+<text x="729.5" y="992.5" class="box-title" text-anchor="middle">Distributed MinIO</text>
+<text x="729.5" y="1008.5" class="box-sub" text-anchor="middle">erasure coding</text>
+<text x="729.5" y="1023.5" class="box-sub" text-anchor="middle">per-zone bucket policies</text>
+<rect x="873.0" y="968" width="255.0" height="72" rx="6" fill="#fafafa" stroke="#b0bec5" stroke-width="1.2" stroke-dasharray="5,4"/>
+<text x="1000.5" y="992.5" class="box-title" text-anchor="middle">Apache Iceberg tables</text>
+<text x="1000.5" y="1008.5" class="box-sub" text-anchor="middle">ACID MERGE · schema evolution</text>
+<text x="1000.5" y="1023.5" class="box-sub" text-anchor="middle">time travel</text>
+<rect x="1144.0" y="968" width="255.0" height="72" rx="6" fill="#fafafa" stroke="#b0bec5" stroke-width="1.2" stroke-dasharray="5,4"/>
+<text x="1271.5" y="992.5" class="box-title" text-anchor="middle">CI/CD pipeline</text>
+<text x="1271.5" y="1008.5" class="box-sub" text-anchor="middle">pytest · compose config</text>
+<text x="1271.5" y="1023.5" class="box-sub" text-anchor="middle">image smoke tests</text>
+<rect x="1415.0" y="968" width="255.0" height="72" rx="6" fill="#fafafa" stroke="#b0bec5" stroke-width="1.2" stroke-dasharray="5,4"/>
+<text x="1542.5" y="992.5" class="box-title" text-anchor="middle">Secrets management</text>
+<text x="1542.5" y="1008.5" class="box-sub" text-anchor="middle">Vault / cloud secrets manager</text>
+<text x="1542.5" y="1023.5" class="box-sub" text-anchor="middle">no plaintext env vars</text>
+<path d="M40,1100 L80,1100" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#ah)"/>
+<text x="90" y="1104" class="legend" text-anchor="start">data flow</text>
+<path d="M190,1100 L230,1100" fill="none" stroke="#455a64" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="6,4" marker-end="url(#ah)"/>
+<text x="240" y="1104" class="legend" text-anchor="start">metrics / monitoring</text>
+<rect x="390" y="1091" width="28" height="18" rx="4" fill="#fafafa" stroke="#b0bec5" stroke-width="1.2" stroke-dasharray="5,4"/>
+<text x="428" y="1104" class="legend" text-anchor="start">planned (not yet implemented)</text>
+</svg>
